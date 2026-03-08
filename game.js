@@ -31,12 +31,11 @@ const config = {
         targetX: 100,
         targetY: 500
     },
-    // FIX: regions are now set dynamically in resizeCanvas based on orientation
     regions: [
-        { name: 'us-east-1', x: 280, y: 340, label: 'US East' },
         { name: 'us-west-2', x: 180, y: 300, label: 'US West' },
-        { name: 'eu-west-1', x: 640, y: 250, label: 'EU West' },
-        { name: 'ap-southeast-1', x: 880, y: 480, label: 'Asia Pacific' },
+        { name: 'us-east-1', x: 280, y: 340, label: 'US East' },      // Below US West as requested
+        { name: 'eu-west-1', x: 680, y: 250, label: 'EU West' },      // Moved right more
+        { name: 'ap-southeast-1', x: 880, y: 520, label: 'Asia Pacific' },  // Moved down more
         { name: 'sa-east-1', x: 380, y: 520, label: 'South America' },
         { name: 'ap-northeast-1', x: 950, y: 280, label: 'Asia NE' }
     ],
@@ -135,48 +134,32 @@ function initMenuAnimation() {
 function resizeCanvas() {
     const container = document.getElementById('game-container');
     const isMobile = window.innerWidth <= 768;
-    // FIX 2: Detect portrait orientation
-    const isPortrait = window.innerHeight > window.innerWidth;
     
+    // Base design dimensions
     const baseWidth = 1200;
     const baseHeight = 800;
     
     if (isMobile) {
+        // Mobile: use full viewport
         config.canvas.width = window.innerWidth;
         config.canvas.height = window.innerHeight;
+        
+        // Calculate scale to fit base design into mobile screen
         config.scaleX = config.canvas.width / baseWidth;
         config.scaleY = config.canvas.height / baseHeight;
     } else {
+        // Desktop: use container size with max dimensions
         config.canvas.width = container.clientWidth;
         config.canvas.height = container.clientHeight;
+        
         config.scaleX = config.canvas.width / baseWidth;
         config.scaleY = config.canvas.height / baseHeight;
     }
     
     config.width = config.canvas.width;
     config.height = config.canvas.height;
-
-    // FIX 2: Remap region positions based on orientation so dots land correctly on the map
-    if (isPortrait) {
-        config.regions = [
-            { name: 'us-east-1',      x: 300, y: 250, label: 'US East' },
-            { name: 'us-west-2',      x: 150, y: 200, label: 'US West' },
-            { name: 'eu-west-1',      x: 580, y: 180, label: 'EU West' },
-            { name: 'ap-southeast-1', x: 850, y: 350, label: 'Asia Pacific' },
-            { name: 'sa-east-1',      x: 320, y: 450, label: 'South America' },
-            { name: 'ap-northeast-1', x: 950, y: 200, label: 'Asia NE' }
-        ];
-    } else {
-        config.regions = [
-            { name: 'us-east-1',      x: 280, y: 340, label: 'US East' },
-            { name: 'us-west-2',      x: 180, y: 300, label: 'US West' },
-            { name: 'eu-west-1',      x: 640, y: 250, label: 'EU West' },
-            { name: 'ap-southeast-1', x: 880, y: 480, label: 'Asia Pacific' },
-            { name: 'sa-east-1',      x: 380, y: 520, label: 'South America' },
-            { name: 'ap-northeast-1', x: 950, y: 280, label: 'Asia NE' }
-        ];
-    }
     
+    // Reinitialize menu animation positions for new canvas size
     if (config.menuAnimation) {
         initMenuAnimationPositions();
     }
@@ -1586,16 +1569,19 @@ function drawWorldMap() {
         const imgAspect = imgWidth / imgHeight;
         const canvasAspect = config.width / config.height;
         let drawWidth, drawHeight, offsetX, offsetY;
+        // Use "contain" behavior - fit entire image while maintaining aspect ratio
         if (canvasAspect > imgAspect) {
-            drawWidth = config.width;
-            drawHeight = config.width / imgAspect;
-            offsetX = 0;
-            offsetY = (config.height - drawHeight) / 2;
-        } else {
+            // Canvas is wider - fit to height
             drawHeight = config.height;
             drawWidth = config.height * imgAspect;
             offsetX = (config.width - drawWidth) / 2;
             offsetY = 0;
+        } else {
+            // Canvas is taller - fit to width
+            drawWidth = config.width;
+            drawHeight = config.width / imgAspect;
+            offsetX = 0;
+            offsetY = (config.height - drawHeight) / 2;
         }
         config.ctx.globalAlpha = 0.4;
         config.ctx.drawImage(config.images.worldMap, offsetX, offsetY, drawWidth, drawHeight);
@@ -2075,49 +2061,55 @@ function drawDataCubes() {
 }
 
 function drawRoundInfo() {
+    // Scale all elements for mobile
     const isMobile = window.innerWidth <= 768;
-    // FIX 3: Detect portrait for better timer placement
-    const isPortrait = window.innerHeight > window.innerWidth;
-
+    const isLandscape = window.innerWidth > window.innerHeight;
+    
+    // Larger box on mobile
     const boxWidth = isMobile ? scaleSize(500) : scaleSize(400);
-    const boxHeight = isMobile ? scaleSize(80) : scaleSize(60);
+    const boxHeight = isMobile ? scaleSize(70) : scaleSize(55);  // Reduced height for tighter spacing
     const boxX = config.width / 2 - boxWidth / 2;
-
+    
+    // Position - moved down a bit on mobile
     let boxY;
     if (isMobile) {
+        // Position from bottom - moved down from 200 to 170
         boxY = config.height - boxHeight - scaleSize(170);
     } else {
-        boxY = scaleSize(10);
+        boxY = scaleSize(10);  // Desktop: near top
     }
-
+    
+    // Timer - ABOVE the box on mobile, larger font
     const elapsed = Date.now() - config.roundStartTime;
     const remaining = Math.ceil((config.currentRoundData.duration - elapsed) / 1000);
     config.ctx.fillStyle = remaining < 10 ? '#ff3030' : '#00f3ff';
-    const timerSize = isMobile ? 34 : 18;
+    const timerSize = isMobile ? 34 : 18;  // Increased from 28 to 34
     config.ctx.font = `bold ${scaleSize(timerSize)}px Arial`;
     config.ctx.textAlign = 'center';
     config.ctx.shadowColor = remaining < 10 ? '#ff3030' : '#00f3ff';
     config.ctx.shadowBlur = 15;
-    // FIX 3: Extra spacing in portrait to avoid overlapping
-    const timerOffsetY = isPortrait ? scaleSize(35) : scaleSize(20);
-    config.ctx.fillText(`Time: ${remaining}s`, config.width / 2, boxY - timerOffsetY);
+    config.ctx.fillText(`Time: ${remaining}s`, config.width / 2, boxY - scaleSize(20));
     config.ctx.shadowBlur = 0;
-
+    
+    // Round name display - box and text properly positioned
     config.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
     config.ctx.fillRect(boxX, boxY, boxWidth, boxHeight);
+    
     config.ctx.fillStyle = '#00f3ff';
-    const titleSize = isMobile ? 38 : 28;
+    const titleSize = isMobile ? 36 : 26;  // Slightly smaller to fit better
     config.ctx.font = `bold ${scaleSize(titleSize)}px Arial`;
     config.ctx.textAlign = 'center';
     config.ctx.shadowColor = '#00f3ff';
     config.ctx.shadowBlur = 15;
-    config.ctx.fillText(config.currentRoundData.name, config.width / 2, boxY + scaleSize(32));
-    const messageSize = isMobile ? 22 : 16;
+    config.ctx.fillText(config.currentRoundData.name, config.width / 2, boxY + scaleSize(28));  // Moved up slightly
+    
+    const messageSize = isMobile ? 20 : 15;  // Slightly smaller
     config.ctx.font = `${scaleSize(messageSize)}px Arial`;
     config.ctx.fillStyle = '#ff6b35';
     config.ctx.shadowColor = '#ff6b35';
     config.ctx.shadowBlur = 10;
-    config.ctx.fillText(config.currentRoundData.message, config.width / 2, boxY + scaleSize(58));
+    config.ctx.fillText(config.currentRoundData.message, config.width / 2, boxY + scaleSize(50));  // Reduced spacing
+    
     config.ctx.shadowBlur = 0;
 }
 
