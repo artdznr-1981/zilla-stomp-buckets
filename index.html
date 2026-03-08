@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- FIX: viewport-fit=cover ensures content fills notch/Dynamic Island areas on iOS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <!-- FIX: Prevent iOS from going to sleep during gameplay -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Zilla-Stomp-Buckets</title>
+    <!-- FIX: was "styles.css" (with s) — corrected to match your actual filename "style.css" -->
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Inline critical fix: prevent flash of unstyled canvas before CSS loads */
+        body { background: #0a0e27; }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <canvas id="gameCanvas"></canvas>
+
+        <div id="menu-screen" class="screen active">
+            <h1 class="game-title">ZILLA-STOMP-BUCKETS</h1>
+            <p class="tagline">Can Godzilla Destroy an S3 Bucket?</p>
+            <div class="menu-buttons">
+                <button id="startBtn" class="menu-btn">START GAME</button>
+                <button id="howToPlayBtn" class="menu-btn">HOW TO PLAY</button>
+                <button id="highScoresBtn" class="menu-btn">HIGH SCORES</button>
+                <button id="soundToggleBtn" class="menu-btn sound-btn">🔊 SOUND: ON</button>
+            </div>
+        </div>
+
+        <div id="howto-screen" class="screen">
+            <h2>HOW TO PLAY</h2>
+            <div class="instructions">
+                <p><strong>Objective:</strong> Help Godzilla stomp S3 buckets as they appear!</p>
+                <p><strong>Controls:</strong> Click or tap on glowing S3 buckets to stomp them</p>
+                <p><strong>Rounds:</strong></p>
+                <ul>
+                    <li>Round 1: Physical Stomp - S3 replicates across 3 Availability Zones</li>
+                    <li>Round 2: Atomic Breath - 11 Nines of Durability (99.999999999%)</li>
+                    <li>Round 3: Sneak Attack - Object Versioning protects your data</li>
+                    <li>Round 4: Object Lock - Ultimate protection in Compliance Mode</li>
+                </ul>
+                <p><strong>Scoring:</strong> Hit buckets quickly for combos and bonus points!</p>
+            </div>
+            <button id="backFromHowTo" class="menu-btn">BACK TO MENU</button>
+        </div>
+
+        <div id="scores-screen" class="screen">
+            <h2>HIGH SCORES</h2>
+            <div id="scoresList"></div>
+            <button id="backFromScores" class="menu-btn">BACK TO MENU</button>
+        </div>
+
+        <div id="name-input-modal" class="modal">
+            <div class="modal-content">
+                <h2>GAME OVER!</h2>
+                <div id="finalStats"></div>
+                <p>Enter your name for the leaderboard:</p>
+                <input type="text" id="playerName" maxlength="20" placeholder="Your Name" />
+                <button id="submitScore" class="menu-btn">SUBMIT SCORE</button>
+                <button id="skipScore" class="menu-btn secondary">SKIP</button>
+            </div>
+        </div>
+
+        <div id="game-ui">
+            <div class="ui-top">
+                <div class="ui-left">
+                    <div class="round-display">Round <span id="round">1</span></div>
+                    <div class="score-display">Score: <span id="score">0</span></div>
+                    <div class="combo-display">Combo: <span id="combo">0</span>x</div>
+                </div>
+                <div class="ui-right">
+                    <button id="pauseBtn" class="game-btn">⏸ PAUSE</button>
+                    <button id="replayBtn" class="game-btn">↻ REPLAY</button>
+                    <button id="mainMenuBtn" class="game-btn">⌂ MENU</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="pause-overlay" class="pause-overlay">
+            <div class="pause-content">
+                <h2>PAUSED</h2>
+                <p>Click RESUME or press ESC to continue</p>
+                <button id="resumeBtn" class="menu-btn">RESUME</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
