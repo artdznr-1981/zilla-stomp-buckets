@@ -2,18 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <!-- FIX: viewport-fit=cover ensures content fills notch/Dynamic Island areas on iOS -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <!-- FIX: Prevent iOS from going to sleep during gameplay -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Zilla-Stomp-Buckets</title>
-    <!-- FIX: was "styles.css" (with s) — corrected to match your actual filename "style.css" -->
     <link rel="stylesheet" href="styles.css">
-    <style>
-        /* Inline critical fix: prevent flash of unstyled canvas before CSS loads */
-        body { background: #0a0e27; }
-    </style>
 </head>
 <body>
     <div id="game-container">
