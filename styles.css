@@ -85,11 +85,11 @@ body::before {
 }
 
 @keyframes glow {
-    0%, 100% { 
+    0%, 100% {
         text-shadow: 0 0 20px #00f3ff, 0 0 40px #00f3ff, 0 0 60px rgba(0, 243, 255, 0.5);
         transform: scale(1);
     }
-    50% { 
+    50% {
         text-shadow: 0 0 30px #00f3ff, 0 0 60px #00f3ff, 0 0 80px #00f3ff, 0 0 100px rgba(0, 243, 255, 0.8);
         transform: scale(1.02);
     }
@@ -281,251 +281,6 @@ body::before {
     border-bottom: 1px solid rgba(0, 243, 255, 0.3);
 }
 
-/* ============================================================
-   MOBILE BASE (portrait + landscape shared)
-   ============================================================ */
-@media (max-width: 768px) {
-    body {
-        overflow: hidden;
-        position: fixed;
-        width: 100%;
-        height: 100%;
-        /* FIX: prevent address bar resize from shifting layout */
-        height: -webkit-fill-available;
-    }
-
-    #game-container {
-        width: 100vw;
-        height: 100vh;
-        height: -webkit-fill-available;   /* FIX: iOS Safari safe height */
-        max-width: 100vw;
-        max-height: 100vh;
-        position: fixed;
-        top: 0;
-        left: 0;
-    }
-
-    #gameCanvas {
-        width: 100vw !important;
-        height: 100vh !important;
-        height: -webkit-fill-available !important;  /* FIX: iOS Safari */
-        position: fixed;
-        top: 0;
-        left: 0;
-    }
-
-    .screen {
-        padding: 20px 10px;
-        overflow-y: auto;
-        /* FIX: ensure screen fills full viewport including notch areas */
-        padding-top: env(safe-area-inset-top, 20px);
-        padding-bottom: env(safe-area-inset-bottom, 20px);
-    }
-
-    .game-title {
-        font-size: 1.5rem;
-        text-align: center;
-        padding: 0 10px;
-        letter-spacing: 1px;
-        line-height: 1.2;
-    }
-
-    .tagline {
-        font-size: 0.8rem;
-        text-align: center;
-        padding: 0 10px;
-        margin-bottom: 20px;
-    }
-
-    .menu-btn {
-        font-size: 0.9rem;
-        padding: 10px 20px;
-        width: 90%;
-        max-width: 280px;
-    }
-
-    .game-btn {
-        font-size: 0.7rem;
-        padding: 6px 10px;
-        white-space: nowrap;
-        flex-shrink: 0;
-    }
-
-    .pause-content h2 {
-        font-size: 2rem;
-    }
-
-    .pause-content p {
-        font-size: 0.9rem;
-        padding: 0 20px;
-    }
-
-    .modal-content {
-        padding: 15px;
-        margin: 10px;
-        max-width: 90%;
-    }
-
-    .modal-content h2 {
-        font-size: 1.5rem;
-    }
-
-    #finalStats {
-        font-size: 0.85rem;
-        padding: 15px;
-    }
-
-    #playerName {
-        font-size: 1rem;
-        padding: 12px;
-    }
-}
-
-/* ============================================================
-   PORTRAIT MODE  — the key fix block
-   ============================================================ */
-@media (max-width: 768px) and (orientation: portrait) {
-
-    /* FIX: UI bar stacks vertically and sits at the very top */
-    .ui-top {
-        position: fixed;          /* fixed so it never scrolls away */
-        top: 0;
-        top: env(safe-area-inset-top, 0px);   /* respect notch */
-        left: 0;
-        right: 0;
-        flex-direction: column;
-        gap: 4px;
-        padding: 6px 8px;
-        align-items: stretch;
-        background: linear-gradient(180deg, rgba(10, 14, 39, 0.98) 0%, rgba(10, 14, 39, 0.85) 100%);
-        z-index: 200;
-    }
-
-    .ui-left {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 8px;
-        width: 100%;
-    }
-
-    .ui-right {
-        display: flex;
-        flex-wrap: nowrap;
-        justify-content: center;
-        gap: 5px;
-        width: 100%;
-    }
-
-    .score-display, .round-display, .combo-display {
-        font-size: 0.75rem;
-        white-space: nowrap;
-        flex-shrink: 0;
-    }
-
-    /* FIX: buttons tappable in portrait */
-    .game-btn {
-        font-size: 0.7rem;
-        padding: 8px 12px;
-        min-height: 36px;         /* easier tap target */
-        touch-action: manipulation;
-    }
-
-    /* FIX: score list readable in portrait */
-    #scoresList {
-        min-width: unset;
-        width: 95vw;
-        padding: 15px;
-    }
-
-    .score-entry {
-        grid-template-columns: 40px 1fr 80px 80px 70px;
-        font-size: 0.75rem;
-        gap: 5px;
-        padding: 6px;
-    }
-
-    /* FIX: instructions panel scrollable in portrait */
-    .instructions {
-        max-width: 95vw;
-        padding: 15px;
-        font-size: 0.85rem;
-        max-height: 60vh;
-        overflow-y: auto;
-    }
-
-    /* FIX: menu buttons fill width nicely in portrait */
-    .menu-buttons {
-        width: 100%;
-        align-items: center;
-        gap: 12px;
-    }
-
-    .menu-btn {
-        width: 85%;
-        max-width: 320px;
-        font-size: 1rem;
-        padding: 12px 20px;
-    }
-}
-
-/* ============================================================
-   LANDSCAPE MODE on mobile — compact UI
-   ============================================================ */
-@media (max-width: 926px) and (orientation: landscape) {
-    .game-title {
-        font-size: 1.2rem;
-        margin-bottom: 5px;
-    }
-
-    .tagline {
-        font-size: 0.7rem;
-        margin-bottom: 15px;
-    }
-
-    .menu-btn {
-        font-size: 0.8rem;
-        padding: 8px 15px;
-    }
-
-    .menu-buttons {
-        gap: 10px;
-    }
-
-    /* Compact single-row UI bar for landscape */
-    .ui-top {
-        position: absolute;
-        top: 5px;
-        left: 0;
-        right: 0;
-        flex-direction: row;
-        justify-content: space-between;
-        padding: 5px;
-        background: linear-gradient(180deg, rgba(10, 14, 39, 0.9) 0%, rgba(10, 14, 39, 0.7) 100%);
-    }
-
-    .ui-left {
-        flex-direction: row;
-        gap: 5px;
-        width: auto;
-    }
-
-    .ui-right {
-        flex-direction: row;
-        gap: 3px;
-        width: auto;
-    }
-
-    .score-display, .round-display, .combo-display {
-        font-size: 0.6rem;
-    }
-
-    .game-btn {
-        font-size: 0.55rem;
-        padding: 4px 6px;
-    }
-}
-
 /* Modal Styles */
 .modal {
     position: absolute;
@@ -623,20 +378,245 @@ body::before {
     box-shadow: 0 0 30px rgba(255, 107, 53, 0.8);
 }
 
-.score-entry {
-    display: grid;
-    grid-template-columns: 50px 1fr 100px 120px 100px;
-    gap: 10px;
-    padding: 10px;
-    border-bottom: 1px solid rgba(0, 243, 255, 0.3);
-    align-items: center;
+/* Mobile Styles */
+@media (max-width: 768px) {
+    body {
+        overflow: hidden;
+        position: fixed;
+        width: 100%;
+        height: 100vh;
+        height: -webkit-fill-available;
+    }
+
+    #game-container {
+        width: 100vw;
+        height: 100vh;
+        height: -webkit-fill-available;
+        max-width: 100vw;
+        max-height: 100vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+    }
+
+    #gameCanvas {
+        width: 100vw !important;
+        height: 100vh !important;
+        height: -webkit-fill-available !important;
+        position: fixed;
+        top: 0;
+        left: 0;
+    }
+
+    .screen {
+        padding: 20px 10px;
+        overflow-y: auto;
+        padding-top: env(safe-area-inset-top, 20px);
+        padding-bottom: env(safe-area-inset-bottom, 20px);
+    }
+
+    .game-title {
+        font-size: 1.5rem;
+        text-align: center;
+        padding: 0 10px;
+        letter-spacing: 1px;
+        line-height: 1.2;
+    }
+
+    .tagline {
+        font-size: 0.8rem;
+        text-align: center;
+        padding: 0 10px;
+        margin-bottom: 20px;
+    }
+
+    .menu-btn {
+        font-size: 0.9rem;
+        padding: 10px 20px;
+        width: 90%;
+        max-width: 280px;
+    }
+
+    .game-btn {
+        font-size: 0.7rem;
+        padding: 6px 10px;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+    .pause-content h2 {
+        font-size: 2rem;
+    }
+
+    .pause-content p {
+        font-size: 0.9rem;
+        padding: 0 20px;
+    }
+
+    .modal-content {
+        padding: 15px;
+        margin: 10px;
+        max-width: 90%;
+    }
+
+    .modal-content h2 {
+        font-size: 1.5rem;
+    }
+
+    #finalStats {
+        font-size: 0.85rem;
+        padding: 15px;
+    }
+
+    #playerName {
+        font-size: 1rem;
+        padding: 12px;
+    }
+
+    #scoresList {
+        min-width: unset;
+        width: 95vw;
+        padding: 15px;
+    }
+
+    .score-entry {
+        display: grid;
+        grid-template-columns: 30px 1fr 60px 60px 50px;
+        font-size: 0.75rem;
+        gap: 5px;
+        padding: 6px;
+        align-items: center;
+    }
+
+    .score-entry span {
+        text-align: left;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .score-entry span:first-child {
+        font-weight: bold;
+        color: #ff6b35;
+    }
+
+    .instructions {
+        max-width: 95vw;
+        padding: 15px;
+        font-size: 0.85rem;
+        max-height: 60vh;
+        overflow-y: auto;
+    }
+
+    .menu-buttons {
+        width: 100%;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .menu-btn {
+        width: 85%;
+        max-width: 320px;
+        font-size: 1rem;
+        padding: 12px 20px;
+    }
 }
 
-.score-entry span {
-    text-align: left;
+/* Portrait Mode */
+@media (max-width: 768px) and (orientation: portrait) {
+    .ui-top {
+        position: fixed;
+        top: 0;
+        top: env(safe-area-inset-top, 0px);
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        gap: 4px;
+        padding: 6px 8px;
+        align-items: stretch;
+        background: linear-gradient(180deg, rgba(10, 14, 39, 0.98) 0%, rgba(10, 14, 39, 0.85) 100%);
+        z-index: 200;
+    }
+
+    .ui-left {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+    }
+
+    .ui-right {
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: center;
+        gap: 5px;
+        width: 100%;
+    }
+
+    .score-display, .round-display, .combo-display {
+        font-size: 0.75rem;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+    .game-btn {
+        font-size: 0.7rem;
+        padding: 8px 12px;
+        min-height: 36px;
+        touch-action: manipulation;
+    }
 }
 
-.score-entry span:first-child {
-    font-weight: bold;
-    color: #ff6b35;
+/* Landscape Mode */
+@media (max-width: 768px) and (orientation: landscape) {
+    .game-title {
+        font-size: 1.2rem;
+        margin-bottom: 5px;
+    }
+
+    .tagline {
+        font-size: 0.7rem;
+        margin-bottom: 15px;
+    }
+
+    .menu-btn {
+        font-size: 0.8rem;
+        padding: 8px 15px;
+    }
+
+    .menu-buttons {
+        gap: 10px;
+    }
+
+    .ui-top {
+        position: absolute;
+        top: 5px;
+        left: 0;
+        right: 0;
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 5px;
+        background: linear-gradient(180deg, rgba(10, 14, 39, 0.9) 0%, rgba(10, 14, 39, 0.7) 100%);
+    }
+
+    .ui-left {
+        flex-direction: row;
+        gap: 5px;
+        width: auto;
+    }
+
+    .ui-right {
+        flex-direction: row;
+        gap: 3px;
+        width: auto;
+    }
+
+    .score-display, .round-display, .combo-display {
+        font-size: 0.6rem;
+    }
+
+    .game-btn {
+        font-size: 0.55rem;
+        padding: 4px 6px;
+    }
 }
